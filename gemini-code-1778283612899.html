@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arm Wrestling Domination</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent: #ef4444;
+            --accent-hover: #dc2626;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --font-main: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-main);
+            line-height: 1.6;
+            padding: 1rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 4rem 1rem;
+            background: linear-gradient(to bottom, #1e293b, #0f172a);
+            border-radius: 1rem;
+            margin-bottom: 3rem;
+            border: 1px solid #334155;
+        }
+
+        .subtitle {
+            color: var(--accent);
+            font-weight: 700;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin: 1rem 0;
+            text-transform: uppercase;
+        }
+
+        .tagline {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            letter-spacing: 1px;
+        }
+
+        .equipment {
+            display: inline-block;
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--accent);
+            padding: 0.75rem 1.5rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        section {
+            margin-bottom: 4rem;
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #334155;
+            padding-bottom: 1rem;
+        }
+
+        .section-num {
+            color: var(--accent);
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 800;
+        }
+
+        /* Grids */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            border: 1px solid #334155;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: #475569;
+        }
+
+        .card h3 {
+            color: var(--text-main);
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Workout Specifics */
+        .workout-category {
+            margin-bottom: 3rem;
+        }
+
+        .workout-category h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .reps {
+            display: inline-block;
+            background: var(--bg-color);
+            color: var(--accent);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 700;
+            margin-top: 1rem;
+            border: 1px solid #334155;
+        }
+
+        .target {
+            color: var(--accent);
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        /* Schedule Table */
+        .schedule {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-bg);
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+
+        .schedule th, .schedule td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #334155;
+        }
+
+        .schedule th {
+            background: #0f172a;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        .schedule tr:last-child td {
+            border-bottom: none;
+        }
+
+        .day-label {
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .schedule, .schedule tbody, .schedule tr, .schedule td {
+                display: block;
+            }
+            .schedule thead {
+                display: none;
+            }
+            .schedule tr {
+                margin-bottom: 1rem;
+                border: 1px solid #334155;
+                border-radius: 0.5rem;
+                padding: 1rem;
+            }
+            .schedule td {
+                border: none;
+                padding: 0.5rem 0;
+            }
+            .schedule td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: var(--text-muted);
+                display: block;
+                font-size: 0.8rem;
+                text-transform: uppercase;
+                margin-bottom: 0.25rem;
+            }
+        }
+
+        .secret-num {
+            color: var(--accent);
+            font-family: monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="subtitle">World Class Program</div>
+        <h1>Arm<br>Wrestling<br>Domination</h1>
+        <div class="tagline">FOREARM · GRIP · RAW POWER · ELITE SECRETS</div>
+        <div class="equipment">⚙ EQUIPMENT: 20 LB + 30 LB DUMBBELLS — HOME TRAINING</div>
+    </header>
+
+    <section id="muscles">
+        <div class="section-header">
+            <span class="section-num">01</span>
+            <h2>Muscles You Must Build To Win</h2>
+        </div>
+        <div class="grid-3">
+            <div class="card">
+                <h3>Pronator Teres</h3>
+                <p>The #1 arm wrestling muscle. Controls pronation — your primary attack position.</p>
+            </div>
+            <div class="card">
+                <h3>Brachioradialis</h3>
+                <p>The large forearm muscle. Powers top roll and hook techniques.</p>
+            </div>
+            <div class="card">
+                <h3>Flexor Carpi Radialis</h3>
+                <p>Wrist flexion and cup — the secret to a crushing wrist position.</p>
+            </div>
+            <div class="card">
+                <h3>Wrist & Finger Flexors</h3>
+                <p>Crushing grip strength — you cannot win without elite grip.</p>
+            </div>
+            <div class="card">
+                <h3>Supinator</h3>
+                <p>Counters your opponent's pronation attack. Defense + offense.</p>
+            </div>
+            <div class="card">
+                <h3>Extensor Carpi Ulnaris</h3>
+                <p>Stabilizes the wrist under maximum load.</p>
+            </div>
+            <div class="card">
+                <h3>Biceps Brachii</h3>
+                <p>Peak pulling force. Critical for hook and drag techniques.</p>
+            </div>
+            <div class="card">
+                <h3>Triceps & Shoulder</h3>
+                <p>Posting power and lateral control against your opponent.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="workouts">
+        <div class="section-header">
+            <span class="section-num">02</span>
+            <h2>Core Workouts With Your Dumbbells</h2>
+        </div>
+
+        <div class="workout-category">
+            <h3>🔴 Grip & Wrist Power</h3>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Dumbbell Wrist Curl</h3>
+                    <span class="target">⭐ Flexor Carpi · Finger Flexors</span>
+                    <p>Sit on a chair, rest forearm on thigh with palm up. Let the 20 lb dumbbell roll to fingertips, then curl the wrist up fully. Full ROM — don't cheat the bottom. This is the foundational arm wrestling move.</p>
+                    <div class="reps">5×15 REPS</div>
+                </div>
+                <div class="card">
+                    <h3>Reverse Wrist Curl</h3>
+                    <span class="target">⭐ Extensor Group · Brachioradialis</span>
+                    <p>Same position but palm facing DOWN. Curl the wrist upward. Crucial for wrist stability and preventing injury under pressure. Use 20 lb.</p>
+                    <div class="reps">4×15 REPS</div>
+                </div>
+                <div class="card">
+                    <h3>Dumbbell Hold Static Grip</h3>
+                    <span class="target">Crushing Grip · All Finger Flexors</span>
+                    <p>Hold the 30 lb dumbbell at the end of the handle (not the center) for maximum leverage challenge. Hold for 30–60 seconds. Switch hands. Do this over a bucket in case you drop it.</p>
+                    <div class="reps">5×45s EACH</div>
+                </div>
+                <div class="card">
+                    <h3>Two-Finger Dumbbell Holds</h3>
+                    <span class="target">Finger Flexors · Pinch Grip</span>
+                    <p>Hold 20 lb dumbbell using only your index + middle finger. Builds crushing finger strength elite arm wrestlers rely on. Start with 10-second holds.</p>
+                    <div class="reps">4×10s EACH</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="workout-category">
+            <h3>🟡 Forearm Mass Builders</h3>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Hammer Curl</h3>
+                    <span class="target">⭐ Brachioradialis · Brachialis · Biceps</span>
+                    <p>Neutral grip (thumbs up). Curl the 30 lb dumbbell slow on the way down (3 seconds). This is the single best mass builder for the outer forearm muscle that dominates arm wrestling. The brachioradialis will visually pop.</p>
+                    <div class="reps">5×10 REPS</div>
+                </div>
+                <div class="card">
+                    <h3>Reverse Curl</h3>
+                    <span class="target">⭐ Brachioradialis · Forearm Extensors</span>
+                    <p>Overhand grip curl with 20 lb. Go slow. This DESTROYS the forearm in the best way. Combined with hammer curls = complete forearm development and injury prevention.</p>
+                    <div class="reps">4×12 REPS</div>
+                </div>
+                <div class="card">
+                    <h3>Zottman Curl</h3>
+                    <span class="target">Biceps + Brachioradialis — Both Heads</span>
+                    <p>Curl up with supinated grip (underhand), rotate to overhand at top, lower slowly with overhand. Hits EVERY angle of the arm in one movement. 20 lb, strict form only.</p>
+                    <div class="reps">4×10 REPS</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="workout-category">
+            <h3>🔵 Pronation / Supination Power</h3>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Dumbbell Pronation Curl</h3>
+                    <span class="target">⭐ Pronator Teres — #1 Arm Wrestling Muscle</span>
+                    <p>Hold 20 lb dumbbell at one end (like a frying pan). Elbow at 90°. Rotate forearm so the weighted end goes DOWN and inward. This is the exact movement of an arm wrestling attack. Train both arms.</p>
+                    <div class="reps">5×15 EACH</div>
+                </div>
+                <div class="card">
+                    <h3>Supination Curl</h3>
+                    <span class="target">Supinator · Biceps Long Head</span>
+                    <p>Same as above but rotate outward (thumb goes up and away). Builds the defense against pronation attacks and bicep peak power for hooking.</p>
+                    <div class="reps">4×15 EACH</div>
+                </div>
+                <div class="card">
+                    <h3>Side Lateral Wrist Deviation</h3>
+                    <span class="target">Flexor Carpi Ulnaris · Radialis</span>
+                    <p>Hold dumbbell with thumb pointing forward. Move wrist left and right (ulnar and radial deviation). Builds the wrist cup — elite arm wrestlers use this to lock opponents down. Use 10–15 lb or end of 20 lb.</p>
+                    <div class="reps">4×12 EACH DIRECTION</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="workout-category">
+            <h3>⚡ Explosive Pulling Power</h3>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Dumbbell Rows (Wide Elbow)</h3>
+                    <span class="target">⭐ Back · Biceps · Shoulder — Full Pulling Chain</span>
+                    <p>One arm row with 30 lb, but keep elbow flared wide (not tucked). This mimics the arm wrestling pull angle. Drive elbow back and up. The lat width you build transfers directly to lateral posting strength.</p>
+                    <div class="reps">5×10 EACH</div>
+                </div>
+                <div class="card">
+                    <h3>Curl to Wrist Curl Combo</h3>
+                    <span class="target">Full Chain: Shoulder → Biceps → Forearm → Wrist</span>
+                    <p>Bicep curl with 20 lb, and at the top of the curl, add a full wrist curl up. One fluid motion. This trains the entire pulling chain in sequence — exactly how arm wrestling force transfers.</p>
+                    <div class="reps">4×12 REPS</div>
+                </div>
+                <div class="card">
+                    <h3>Isometric Curl Hold</h3>
+                    <span class="target">Biceps · Brachioradialis · Tendons</span>
+                    <p>Hold the 30 lb dumbbell at 90° (elbow bent at right angle). Hold for 30 seconds. This BUILDS the strength-endurance needed to survive long matches. Tendons and connective tissue get bulletproofed.</p>
+                    <div class="reps">5×30s EACH ARM</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="schedule">
+        <div class="section-header">
+            <span class="section-num">03</span>
+            <h2>Weekly Training Schedule</h2>
+            <p class="tagline" style="margin-top: 1rem;">The Rule: Forearms and tendons need more recovery than big muscles. Never train the same grip pattern 2 days in a row. Inflammation in forearm tendons is the #1 reason arm wrestlers plateau. Follow this schedule precisely.</p>
+        </div>
+        
+        <table class="schedule">
+            <thead>
+                <tr>
+                    <th>Day</th>
+                    <th>Focus</th>
+                    <th>Key Exercises</th>
+                    <th>Duration</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td data-label="Day" class="day-label">Monday</td>
+                    <td data-label="Focus">ATTACK (Pronation + Wrist Curl)</td>
+                    <td data-label="Key Exercises">Pronation Curls, Wrist Curls, Hammer Curls, Finger Holds</td>
+                    <td data-label="Duration">45 min</td>
+                </tr>
+                <tr>
+                    <td data-label="Day" class="day-label">Tuesday</td>
+                    <td data-label="Focus">PULLING POWER (Back + Biceps)</td>
+                    <td data-label="Key Exercises">Wide-Elbow Rows, Reverse Curls, Zottman Curls</td>
+                    <td data-label="Duration">40 min</td>
+                </tr>
+                <tr>
+                    <td data-label="Day" class="day-label">Wednesday</td>
+                    <td data-label="Focus">REST / Light Walk</td>
+                    <td data-label="Key Exercises">Optional: 10 min finger stretching + mobility</td>
+                    <td data-label="Duration">—</td>
+                </tr>
+                <tr>
+                    <td data-label="Day" class="day-label">Thursday</td>
+                    <td data-label="Focus">GRIP TORTURE DAY</td>
+                    <td data-label="Key Exercises">Static Holds, 2-Finger Holds, Wrist Deviations, Isometric Holds</td>
+                    <td data-label="Duration">40 min</td>
+                </tr>
+                <tr>
+                    <td data-label="Day" class="day-label">Friday</td>
+                    <td data-label="Focus">SUPINATION + Defense</td>
+                    <td data-label="Key Exercises">Supination Curls, Reverse Wrist Curls, Curl+Wrist Combo</td>
+                    <td data-label="Duration">40 min</td>
+                </tr>
+                <tr>
+                    <td data-label="Day" class="day-label">Saturday</td>
+                    <td data-label="Focus">FULL POWER DAY</td>
+                    <td data-label="Key Exercises">Best of all sessions. Go heavier. 30 lb on everything possible.</td>
+                    <td data-label="Duration">60 min</td>
+                </tr>
+                <tr>
+                    <td data-label="Day" class="day-label">Sunday</td>
+                    <td data-label="Focus">FULL REST</td>
+                    <td data-label="Key Exercises">Mandatory. This is when you actually grow. Eat and sleep.</td>
+                    <td data-label="Duration">—</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section id="secrets">
+        <div class="section-header">
+            <h2>The Elite Secrets</h2>
+            <p class="tagline" style="margin-top: 1rem;">WHAT WORLD CHAMPIONS KNOW THAT MOST PEOPLE NEVER FIND OUT</p>
+        </div>
+        
+        <div class="grid-2">
+            <div class="card">
+                <div class="secret-num">SECRET 01</div>
+                <h3>Train The Wrist Cup — Not Just Grip</h3>
+                <p>Most people train crushing grip. Elite arm wrestlers train the wrist cup — keeping the wrist bent toward your body in a flexed, pronated position under load. This position nullifies your opponent's attack before it starts. Train it with wrist curls done at the end of your range with a 3-second squeeze hold at the top. Do 10 reps of these every single day.</p>
+            </div>
+            <div class="card">
+                <div class="secret-num">SECRET 02</div>
+                <h3>Slow Negatives Build More Strength</h3>
+                <p>Tendons and connective tissue in the forearm respond to eccentric (lowering) stress more than concentric. Lower every rep in 4–5 seconds. This is called eccentric overload. The brachioradialis and pronator teres will grow 30–40% faster when you add slow negatives. It feels boring. Champions don't care how it feels.</p>
+            </div>
+            <div class="card">
+                <div class="secret-num">SECRET 03</div>
+                <h3>The Edge of Plate Hold</h3>
+                <p>Top arm wrestlers have freakish thumb and pinch grip. You can replicate this at home: hold the 20 lb dumbbell by pinching the flat weight plate area with your fingers and thumb — not the handle. Hold 20–30 seconds. This strengthens the thenar muscles (thumb base) and deep finger tendons that standard grip training ignores completely.</p>
+            </div>
+            <div class="card">
+                <div class="secret-num">SECRET 04</div>
+                <h3>Blood Flow Restriction (BFR)</h3>
+                <p>Wrap a band or knee wrap just below your bicep, snug but not tight enough to stop pulse. Then do wrist curls and hammer curls with the 20 lb. The blood pooling causes massive metabolic stress and cell swelling that triggers muscle growth at 40% of normal load. Used in Japanese powerlifting labs. 4 sets × 30 reps with 30s rests. Your forearms will feel on fire. That's correct.</p>
+            </div>
+            <div class="card">
+                <div class="secret-num">SECRET 05</div>
+                <h3>Tension Training</h3>
+                <p>On wrist curls and hammer curls, never let the weight fully decompress at the bottom. Stop just before your wrist fully opens. Keep the muscle under tension 100% of the set. This technique increases time under tension by 40% and forces the muscle to adapt without any "free rest" during the set. It's brutal and it works.</p>
+            </div>
+            <div class="card">
+                <div class="secret-num">SECRET 06</div>
+                <h3>The Newspaper Crumple</h3>
+                <p>Take a single sheet of newspaper or paper. With one hand, crumple the entire sheet into a ball using only your fingers, no thumb allowed, as fast as possible. Then flatten and repeat 5 times per hand. This isolates the deep finger flexors and intrinsic hand muscles that no dumbbell exercise reaches. World class grapplers and arm wrestlers use this before bed every night.</p>
+            </div>
+            <div class="card">
+                <div class="secret-num">SECRET 07</div>
+                <h3>Sleep Is When Your Forearms Grow</h3>
+                <p>Forearm tendons have very low blood supply compared to muscles — they heal and grow mostly during deep sleep when growth hormone peaks. If you sleep under 7 hours, tendon adaptation drops by 50%. Eat protein before bed (Greek yogurt, cottage cheese, eggs). Supplement with Vitamin C (1000mg/day) — it is the precursor to collagen. No secret program beats this.</p>
+            </div>
+            <div class="card">
+                <div class="secret-num">SECRET 08</div>
+                <h3>The Arm Wrestling Isometric Wall Drill</h3>
+                <p>Stand sideways next to a door frame. Grip the frame at elbow height in an arm wrestling start position. Pull with 100% maximum force for 6–8 seconds. Rest 10 seconds. Repeat 5–6 times per arm. This is pure neurological strength training — it teaches your CNS to fire MORE motor units at once. Strength gains happen within 2 weeks. World champions do this 3× per week.</p>
+            </div>
+            <div class="card">
+                <div class="secret-num">SECRET 09</div>
+                <h3>Train Both Arms Equally</h3>
+                <p>Training your non-dominant arm increases neural drive and strength in your dominant arm by 7–12% through a phenomenon called cross-education. This is documented in sports science. Arm wrestlers who train both arms have stronger dominant arms than those who only train one. Every exercise, both arms, equal reps.</p>
+            </div>
+            <div class="card">
+                <div class="secret-num">SECRET 10</div>
+                <h3>Progressive Overload</h3>
+                <p>None of these exercises matter if you don't add reps or resistance every 1–2 weeks. Track every workout. Add 1 rep to each set before adding weight. When you can do 20 lb wrist curls for 5×15 perfectly, do 5×20. Then switch to 30 lb for 5×10. Your body only adapts when it is forced to. The journal is the most important piece of equipment you own.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer style="text-align: center; padding: 2rem 0; border-top: 1px solid #334155; margin-top: 4rem;">
+        <p class="tagline">ARM WRESTLING DOMINATION PROGRAM — BUILT FOR CHAMPIONS WHO START AT HOME</p>
+    </footer>
+</div>
+
+</body>
+</html>
